@@ -4,13 +4,13 @@ importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-comp
 
 // Initialize Firebase in service worker
 firebase.initializeApp({
-  apiKey: 'AIzaSyDemoKey-Replace-With-Your-Web-API-Key',
+  apiKey: 'AIzaSyBo3KWThxxoeqB4doa_9mf0974vN5BMPqI',
   authDomain: 'mycitykg.firebaseapp.com',
   projectId: 'mycitykg',
-  storageBucket: 'mycitykg.appspot.com',
+  storageBucket: 'mycitykg.firebasestorage.app',
   messagingSenderId: '544289183767',
-  appId: '1:544289183767:web:demo-app-id',
-  measurementId: 'G-DEMO-MEASUREMENT-ID'
+  appId: '1:544289183767:web:de2c50766185ec93482452',
+  measurementId: 'G-9K86YXBJK0'
 });
 
 // Initialize Firebase Messaging

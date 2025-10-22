@@ -38,13 +38,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDemoKey-Replace-With-Your-Web-API-Key',
-    appId: '1:544289183767:web:demo-app-id',
+    apiKey: 'AIzaSyBo3KWThxxoeqB4doa_9mf0974vN5BMPqI',
+    appId: '1:544289183767:web:de2c50766185ec93482452',
     messagingSenderId: '544289183767',
     projectId: 'mycitykg',
     authDomain: 'mycitykg.firebaseapp.com',
-    storageBucket: 'mycitykg.appspot.com',
-    measurementId: 'G-DEMO-MEASUREMENT-ID',
+    storageBucket: 'mycitykg.firebasestorage.app',
+    measurementId: 'G-9K86YXBJK0',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
     appId: '1:544289183767:android:825cd13cceef257c482452',
     messagingSenderId: '544289183767',
     projectId: 'mycitykg',
-    storageBucket: 'mycitykg.appspot.com',
+    storageBucket: 'mycitykg.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
     appId: '1:544289183767:ios:demo-app-id',
     messagingSenderId: '544289183767',
     projectId: 'mycitykg',
-    storageBucket: 'mycitykg.appspot.com',
+    storageBucket: 'mycitykg.firebasestorage.app',
     iosBundleId: 'com.mycitykg.app',
   );
 
@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
     appId: '1:544289183767:macos:demo-app-id',
     messagingSenderId: '544289183767',
     projectId: 'mycitykg',
-    storageBucket: 'mycitykg.appspot.com',
+    storageBucket: 'mycitykg.firebasestorage.app',
     iosBundleId: 'com.mycitykg.app',
   );
 
@@ -78,7 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:544289183767:windows:demo-app-id',
     messagingSenderId: '544289183767',
     projectId: 'mycitykg',
-    storageBucket: 'mycitykg.appspot.com',
+    storageBucket: 'mycitykg.firebasestorage.app',
   );
 
   static const FirebaseOptions linux = FirebaseOptions(
@@ -86,6 +86,6 @@ class DefaultFirebaseOptions {
     appId: '1:544289183767:linux:demo-app-id',
     messagingSenderId: '544289183767',
     projectId: 'mycitykg',
-    storageBucket: 'mycitykg.appspot.com',
+    storageBucket: 'mycitykg.firebasestorage.app',
   );
 }

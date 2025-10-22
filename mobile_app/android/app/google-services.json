@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "544289183767",
     "project_id": "mycitykg",
-    "storage_bucket": "mycitykg.appspot.com"
+    "storage_bucket": "mycitykg.firebasestorage.app"
   },
   "client": [
     {
