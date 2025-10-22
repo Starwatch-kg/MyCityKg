@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Camera, MapPin, ChevronLeft, Image as ImageIcon, X, Map } from 'lucide-react'
-import { addIssue } from '../store/slices/issuesSlice'
+import { createIssue } from '../store/slices/issuesSlice'
 import { useTranslation } from '../i18n/useTranslation'
+import Toast from '../components/Toast'
 
 const AddIssue = () => {
   const navigate = useNavigate()
@@ -30,6 +31,8 @@ const AddIssue = () => {
   const [photoPreviews, setPhotoPreviews] = useState([])
   const [isGettingLocation, setIsGettingLocation] = useState(false)
   const [isLoadingAddress, setIsLoadingAddress] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const issueTypes = [
     { value: 'мусор', label: `🗑️ ${t('issues.types.trash')}`, emoji: '🗑️' },
@@ -140,7 +143,7 @@ const AddIssue = () => {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     
     if (!formData.type || !formData.title) {
@@ -153,12 +156,39 @@ const AddIssue = () => {
       return
     }
 
-    dispatch(addIssue({
-      ...formData,
-      photo: photoPreview || 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?w=400',
-    }))
+    setIsSubmitting(true)
 
-    navigate('/')
+    try {
+      // Prepare data for backend API
+      const reportData = {
+        title: formData.title,
+        description: formData.description,
+        categoryId: 1, // Default category, should be mapped from formData.type
+        location: {
+          type: 'Point',
+          coordinates: [formData.location.lng, formData.location.lat]
+        },
+        address: formData.address,
+        images: photoPreviews.length > 0 ? photoPreviews : [],
+        isAnonymous: formData.anonymous
+      }
+
+      await dispatch(createIssue(reportData))
+      
+      // Показываем успешное сообщение
+      setShowToast(true)
+      
+      // Ждем немного чтобы пользователь увидел сообщение, затем переходим
+      setTimeout(() => {
+        navigate('/')
+      }, 2000)
+      
+    } catch (error) {
+      console.error('Error submitting issue:', error)
+      alert('Произошла ошибка при отправке жалобы')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -345,11 +375,25 @@ const AddIssue = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-primary text-white font-bold py-4 rounded-xl transition-all duration-200 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98]"
+          disabled={isSubmitting}
+          className={`w-full font-bold py-4 rounded-xl transition-all duration-200 shadow-lg ${
+            isSubmitting 
+              ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
+              : 'bg-primary text-white shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98]'
+          }`}
         >
-          {t('issues.submit')}
+          {isSubmitting ? 'Отправляем...' : t('issues.submit')}
         </button>
       </form>
+
+      {/* Toast уведомление */}
+      <Toast
+        message="🎉 Ваша жалоба отправлена! Ваш голос будет услышан, и мы обязательно рассмотрим вашу проблему."
+        type="success"
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+        duration={4000}
+      />
     </div>
   )
 }

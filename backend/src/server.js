@@ -13,10 +13,9 @@ require('dotenv').config();
 
 const config = require('./config/config');
 const logger = require('./utils/logger');
-const errorHandler = require('./middleware/errorHandler');
-const notFoundHandler = require('./middleware/notFoundHandler');
-const connectDB = require('./config/db');
-const initializeFirebase = require('./config/firebase');
+const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+const { sequelize } = require('./models');
+const { initializeFirebase } = require('./config/firebase');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -157,7 +156,7 @@ process.on('SIGTERM', () => {
   logger.info('SIGTERM received, shutting down gracefully');
   server.close(() => {
     logger.info('Process terminated');
-    mongoose.connection.close();
+    sequelize.close();
   });
 });
 
@@ -165,7 +164,7 @@ process.on('SIGINT', () => {
   logger.info('SIGINT received, shutting down gracefully');
   server.close(() => {
     logger.info('Process terminated');
-    mongoose.connection.close();
+    sequelize.close();
   });
 });
 
@@ -186,11 +185,16 @@ process.on('uncaughtException', (err) => {
 // Initialize services and start server
 async function startServer() {
   try {
-    // Connect to MongoDB
-    await connectDB();
+    // Test database connection
+    await sequelize.authenticate();
+    logger.info('Database connection established successfully');
     
-    // Initialize Firebase
-    await initializeFirebase();
+    // Initialize Firebase (optional)
+    try {
+      await initializeFirebase();
+    } catch (error) {
+      logger.warn('Firebase initialization failed, continuing without Firebase:', error.message);
+    }
     
     // Start server
     server.listen(config.port, () => {

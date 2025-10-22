@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { 
   Edit, LogOut, User as UserIcon, Settings, Bell, 
   Award, TrendingUp, Calendar, MapPin, Clock, CheckCircle,
-  AlertCircle, XCircle, List
+  AlertCircle, XCircle, List, FileText
 } from 'lucide-react'
 import { logout } from '../store/slices/authSlice'
 import { motion } from 'framer-motion'
@@ -85,6 +85,12 @@ const Profile = () => {
   }) : t('profile.recentlyJoined')
 
   const quickActions = [
+    {
+      icon: FileText,
+      label: 'Мои жалобы',
+      badge: totalIssues,
+      action: () => navigate('/my-reports'),
+    },
     {
       icon: Bell,
       label: t('nav.notifications'),
@@ -279,7 +285,7 @@ const Profile = () => {
                   Последние жалобы
                 </h3>
                 <button
-                  onClick={() => navigate('/my-issues')}
+                  onClick={() => navigate('/my-reports')}
                   className="text-sm text-primary hover:underline"
                 >
                   Все жалобы →

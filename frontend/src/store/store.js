@@ -11,4 +11,11 @@ export const store = configureStore({
     auth: authReducer,
     notifications: notificationsReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['app/setUserLocation'],
+        ignoredPaths: ['app.userLocation'],
+      },
+    }),
 })

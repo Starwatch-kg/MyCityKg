@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import CityMap from './pages/CityMap'
 import AddIssue from './pages/AddIssue'
 import MyIssues from './pages/MyIssues'
+import MyReports from './pages/MyReports'
 import EcologyInfo from './pages/EcologyInfo'
 import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
@@ -35,7 +36,9 @@ function App() {
         <Route index element={<CityMap />} />
         <Route path="map" element={<CityMap />} />
         <Route path="add" element={<AddIssue />} />
+        <Route path="add-issue" element={<AddIssue />} />
         <Route path="my-issues" element={<MyIssues />} />
+        <Route path="my-reports" element={<MyReports />} />
         <Route path="ecology" element={<EcologyInfo />} />
         <Route path="profile" element={<Profile />} />
         <Route path="edit-profile" element={<EditProfile />} />

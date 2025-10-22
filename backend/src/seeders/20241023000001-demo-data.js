@@ -89,7 +89,7 @@ module.exports = {
           tasksCompleted: 25,
           rating: 4.8
         }),
-        fcmTokens: [],
+        fcmTokens: '{}',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -109,7 +109,7 @@ module.exports = {
           tasksCompleted: 15,
           rating: 4.5
         }),
-        fcmTokens: [],
+        fcmTokens: '{}',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -131,7 +131,7 @@ module.exports = {
           tasksCompleted: 10,
           rating: 4.2
         }),
-        fcmTokens: [],
+        fcmTokens: '{}',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -153,7 +153,7 @@ module.exports = {
           tasksCompleted: 2,
           rating: 4.0
         }),
-        fcmTokens: [],
+        fcmTokens: '{}',
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -170,7 +170,7 @@ module.exports = {
         userId: 4, // Regular user
         status: 'pending',
         priority: 'high',
-        images: ['https://example.com/images/pothole1.jpg', 'https://example.com/images/pothole2.jpg'],
+        images: '{https://example.com/images/pothole1.jpg,https://example.com/images/pothole2.jpg}',
         isAnonymous: false,
         upvotes: 15,
         downvotes: 2,
@@ -192,7 +192,7 @@ module.exports = {
         userId: null, // Anonymous report
         status: 'in_progress',
         priority: 'medium',
-        images: ['https://example.com/images/streetlight.jpg'],
+        images: '{https://example.com/images/streetlight.jpg}',
         isAnonymous: true,
         upvotes: 8,
         downvotes: 0,
@@ -214,7 +214,7 @@ module.exports = {
         userId: 3, // Volunteer
         status: 'resolved',
         priority: 'medium',
-        images: ['https://example.com/images/trash1.jpg'],
+        images: '{https://example.com/images/trash1.jpg}',
         isAnonymous: false,
         upvotes: 12,
         downvotes: 1,
@@ -246,8 +246,8 @@ module.exports = {
         estimatedHours: 4.0,
         maxVolunteers: 10,
         currentVolunteers: 3,
-        requiredSkills: ['physical_work', 'teamwork'],
-        images: ['https://example.com/images/park_cleanup.jpg'],
+        requiredSkills: '{physical_work,teamwork}',
+        images: '{https://example.com/images/park_cleanup.jpg}',
         deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
         metadata: JSON.stringify({
           tools_provided: true,
@@ -271,8 +271,8 @@ module.exports = {
         estimatedHours: 6.0,
         maxVolunteers: 3,
         currentVolunteers: 0,
-        requiredSkills: ['painting', 'manual_work'],
-        images: ['https://example.com/images/bus_stop.jpg'],
+        requiredSkills: '{painting,manual_work}',
+        images: '{https://example.com/images/bus_stop.jpg}',
         deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days from now
         metadata: JSON.stringify({
           tools_provided: true,

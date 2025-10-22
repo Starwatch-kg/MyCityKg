@@ -6,6 +6,7 @@ import { Filter, Navigation, Trash2, Lightbulb, Construction, Droplet, Wind, Fil
 import L from 'leaflet'
 import { motion, AnimatePresence } from 'framer-motion'
 import { setUserLocation } from '../store/slices/appSlice'
+import { fetchIssues } from '../store/slices/issuesSlice'
 import FilterModal from '../components/FilterModal'
 
 // Fix for default marker icons in Leaflet
@@ -118,8 +119,10 @@ const MapClickHandler = ({ onMapClick }) => {
 const CityMap = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch()
   const issues = useSelector(state => state.issues.issues)
   const filters = useSelector(state => state.issues.filters)
+  const loading = useSelector(state => state.issues.loading)
   const [showFilters, setShowFilters] = useState(false)
   const [showTypeMenu, setShowTypeMenu] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState(null)
@@ -128,6 +131,11 @@ const CityMap = () => {
   // Check if we're in location selection mode
   const selectLocationMode = location.state?.selectLocation
   const returnTo = location.state?.returnTo
+
+  // Load issues from API on component mount
+  useEffect(() => {
+    dispatch(fetchIssues())
+  }, [dispatch])
 
   const issueTypes = [
     { value: 'мусор', label: 'Мусор', icon: Trash2, color: '#FFD43B' },

@@ -3,10 +3,8 @@ const { body, query, validationResult } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
 
-const Report = require('../models/Report');
-const User = require('../models/User');
-const auth = require('../middleware/auth');
-const { authorize, optionalAuth } = require('../middleware/auth');
+const { Report, User } = require('../models');
+const { auth, authorize, optionalAuth } = require('../middleware/auth');
 const { asyncHandler } = require('../middleware/errorHandler');
 const logger = require('../utils/logger');
 const config = require('../config/config');
@@ -132,18 +130,18 @@ router.get('/', optionalAuth, [
   }
 
   try {
-    const reports = await Report.find(query)
-      .populate('user', 'firstName lastName avatar isAnonymous')
-      .populate('assignedTo', 'firstName lastName')
-      .sort({ createdAt: -1 })
-      .limit(parseInt(limit))
-      .skip(parseInt(offset));
+    const reports = await Report.findAll({
+      where: query,
+      order: [['createdAt', 'DESC']],
+      limit: parseInt(limit),
+      offset: parseInt(offset)
+    });
 
-    const total = await Report.countDocuments(query);
+    const total = await Report.count({ where: query });
 
     // Filter out user info for anonymous reports
     const filteredReports = reports.map(report => {
-      const reportObj = report.toObject();
+      const reportObj = report.toJSON();
       if (report.isAnonymous) {
         reportObj.user = null;
       }
@@ -190,10 +188,7 @@ router.get('/', optionalAuth, [
  *         description: Жалоба не найдена
  */
 router.get('/:id', optionalAuth, asyncHandler(async (req, res) => {
-  const report = await Report.findById(req.params.id)
-    .populate('user', 'firstName lastName avatar isAnonymous')
-    .populate('assignedTo', 'firstName lastName')
-    .populate('comments.user', 'firstName lastName avatar');
+  const report = await Report.findByPk(req.params.id);
 
   if (!report) {
     return res.status(404).json({

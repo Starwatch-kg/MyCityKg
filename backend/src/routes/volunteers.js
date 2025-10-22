@@ -1,10 +1,8 @@
 const express = require('express');
 const { body, query, validationResult } = require('express-validator');
 
-const VolunteerTask = require('../models/VolunteerTask');
-const User = require('../models/User');
-const auth = require('../middleware/auth');
-const { authorize, optionalAuth } = require('../middleware/auth');
+const { VolunteerTask, User } = require('../models');
+const { auth, authorize, optionalAuth } = require('../middleware/auth');
 const { asyncHandler } = require('../middleware/errorHandler');
 const logger = require('../utils/logger');
 const config = require('../config/config');

@@ -1,16 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { apiService } from '../../services/api'
 
-// Mock data removed - no fake markers on map
-const mockIssues = []
+// Async thunks for API calls
+export const fetchIssues = createAsyncThunk(
+  'issues/fetchIssues',
+  async (params = {}) => {
+    const response = await apiService.getReports(params)
+    return response.data || response
+  }
+)
+
+export const createIssue = createAsyncThunk(
+  'issues/createIssue',
+  async (issueData) => {
+    const response = await apiService.createReport(issueData)
+    return response.data || response
+  }
+)
 
 const initialState = {
-  issues: mockIssues,
+  issues: [],
   filters: {
     type: null,
     district: null,
     status: null,
   },
   selectedIssue: null,
+  loading: false,
+  error: null,
 }
 
 const issuesSlice = createSlice({
@@ -47,6 +64,41 @@ const issuesSlice = createSlice({
         issue.reactions.likes += 1
       }
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload
+    },
+    setError: (state, action) => {
+      state.error = action.payload
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Fetch issues
+      .addCase(fetchIssues.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(fetchIssues.fulfilled, (state, action) => {
+        state.loading = false
+        state.issues = action.payload
+      })
+      .addCase(fetchIssues.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
+      // Create issue
+      .addCase(createIssue.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(createIssue.fulfilled, (state, action) => {
+        state.loading = false
+        state.issues.unshift(action.payload)
+      })
+      .addCase(createIssue.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
   },
 })
 
@@ -57,6 +109,8 @@ export const {
   clearFilters,
   selectIssue,
   likeIssue,
+  setLoading,
+  setError,
 } = issuesSlice.actions
 
 export default issuesSlice.reducer

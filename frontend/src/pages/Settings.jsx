@@ -144,12 +144,12 @@ const Settings = () => {
                     </div>
 
                     {item.toggle ? (
-                      <button
+                      <div
                         onClick={(e) => {
                           e.stopPropagation()
                           item.action()
                         }}
-                        className={`relative w-12 h-6 rounded-full transition-colors ${
+                        className={`relative w-12 h-6 rounded-full transition-colors cursor-pointer ${
                           item.value ? 'bg-primary' : 'bg-surface-light'
                         }`}
                       >
@@ -158,7 +158,7 @@ const Settings = () => {
                             item.value ? 'translate-x-6' : 'translate-x-1'
                           }`}
                         />
-                      </button>
+                      </div>
                     ) : item.value ? (
                       <div className="flex items-center gap-2 text-gray-400">
                         <span className="text-sm">{item.value}</span>

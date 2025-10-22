@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { User } = require('../models');
 const config = require('../config/config');
 const logger = require('../utils/logger');
 
@@ -25,7 +25,9 @@ const auth = async (req, res, next) => {
     const decoded = jwt.verify(token, config.jwt.secret);
     
     // Find user
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findByPk(decoded.id, {
+      attributes: { exclude: ['password'] }
+    });
     
     if (!user) {
       return res.status(401).json({
@@ -108,7 +110,9 @@ const optionalAuth = async (req, res, next) => {
 
     const token = authHeader.substring(7);
     const decoded = jwt.verify(token, config.jwt.secret);
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findByPk(decoded.id, {
+      attributes: { exclude: ['password'] }
+    });
     
     if (user && user.isActive) {
       req.user = user;
@@ -164,7 +168,7 @@ const checkOwnership = (resourceField = 'user') => {
       // Check ownership
       const resourceUserId = req.resource[resourceField];
       
-      if (!resourceUserId || !resourceUserId.equals(req.user._id)) {
+      if (!resourceUserId || resourceUserId !== req.user.id) {
         return res.status(403).json({
           success: false,
           message: 'Доступ запрещен',
@@ -211,7 +215,7 @@ const roleBasedRateLimit = () => {
     standardHeaders: true,
     legacyHeaders: false,
     keyGenerator: (req) => {
-      return req.user ? req.user._id.toString() : req.ip;
+      return req.user ? req.user.id.toString() : req.ip;
     },
   });
 };
@@ -279,7 +283,7 @@ const logActivity = (action) => {
   return (req, res, next) => {
     if (req.user) {
       logger.info(`User activity: ${req.user.email} - ${action}`, {
-        userId: req.user._id,
+        userId: req.user.id,
         action,
         ip: req.ip,
         userAgent: req.get('User-Agent'),

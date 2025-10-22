@@ -3,7 +3,7 @@ const path = require('path');
 const config = {
   // Server configuration
   nodeEnv: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT, 10) || 3000,
+  port: parseInt(process.env.PORT, 10) || 3001,
   apiVersion: process.env.API_VERSION || 'v1',
 
   // Database configuration
@@ -102,7 +102,7 @@ const config = {
 
   // CORS configuration
   cors: {
-    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3000'],
+    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3000', 'http://localhost:3002'],
   },
 
   // Security configuration
@@ -172,6 +172,14 @@ const config = {
   cache: {
     ttl: 300, // 5 minutes
     maxKeys: 1000,
+  },
+
+  // Validation configuration
+  validation: {
+    maxTitleLength: 200,
+    maxDescriptionLength: 1000,
+    minTitleLength: 5,
+    minDescriptionLength: 10,
   },
 };
 
