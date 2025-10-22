@@ -10,12 +10,17 @@
     "test:watch": "jest --watch",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "seed": "node src/scripts/seed.js"
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:seed": "sequelize-cli db:seed:all",
+    "db:seed:undo": "sequelize-cli db:seed:undo:all",
+    "db:create": "sequelize-cli db:create",
+    "db:drop": "sequelize-cli db:drop"
   },
   "keywords": [
     "nodejs",
     "express",
-    "mongodb",
+    "postgresql",
     "api",
     "mobile",
     "city",
@@ -26,7 +31,8 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^8.0.3",
+    "pg": "^8.11.3",
+    "sequelize": "^6.35.1",
     "cors": "^2.8.5",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
@@ -59,7 +65,8 @@
     "eslint": "^8.55.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.0",
-    "@types/jest": "^29.5.8"
+    "@types/jest": "^29.5.8",
+    "sequelize-cli": "^6.6.2"
   },
   "engines": {
     "node": ">=18.0.0",

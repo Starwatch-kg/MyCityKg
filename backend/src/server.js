@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -16,7 +15,7 @@ const config = require('./config/config');
 const logger = require('./utils/logger');
 const errorHandler = require('./middleware/errorHandler');
 const notFoundHandler = require('./middleware/notFoundHandler');
-const connectDB = require('./config/database');
+const connectDB = require('./config/db');
 const initializeFirebase = require('./config/firebase');
 
 // Import routes
