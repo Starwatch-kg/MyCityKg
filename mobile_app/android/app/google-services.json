@@ -12,25 +12,15 @@
           "package_name": "com.mycitykg.app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "544289183767-demo-oauth-client-id.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDemoKey-Replace-With-Your-Android-API-Key"
+          "current_key": "AIzaSyDcASXSnmySncChRIbQqGJX8Oc6bYhOO5c"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "544289183767-demo-web-client-id.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
