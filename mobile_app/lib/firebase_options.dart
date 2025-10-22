@@ -49,7 +49,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDemoKey-Replace-With-Your-Android-API-Key',
-    appId: '1:544289183767:android:demo-app-id',
+    appId: '1:544289183767:android:825cd13cceef257c482452',
     messagingSenderId: '544289183767',
     projectId: 'mycitykg',
     storageBucket: 'mycitykg.appspot.com',
