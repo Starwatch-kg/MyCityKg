@@ -26,11 +26,12 @@ const Profile = () => {
   }
 
   // Расширенная статистика
-  const totalIssues = issues.length
-  const inProgressIssues = issues.filter(i => i.status === 'в работе').length
-  const resolvedIssues = issues.filter(i => i.status === 'решено').length
-  const newIssues = issues.filter(i => i.status === 'новая').length
-  const rejectedIssues = issues.filter(i => i.status === 'отклонено').length
+  const issuesArray = Array.isArray(issues) ? issues : []
+  const totalIssues = issuesArray.length
+  const inProgressIssues = issuesArray.filter(i => i.status === 'в работе').length
+  const resolvedIssues = issuesArray.filter(i => i.status === 'решено').length
+  const newIssues = issuesArray.filter(i => i.status === 'новая').length
+  const rejectedIssues = issuesArray.filter(i => i.status === 'отклонено').length
   
   const stats = [
     { label: t('profile.stats.total'), value: totalIssues, icon: List, color: 'text-blue-400' },
@@ -76,7 +77,7 @@ const Profile = () => {
   ]
   
   // Последние жалобы
-  const recentIssues = issues.slice(0, 3)
+  const recentIssues = issuesArray.slice(0, 3)
   
   // Дата регистрации
   const memberSince = user?.createdAt ? new Date(user.createdAt).toLocaleDateString('ru-RU', { 

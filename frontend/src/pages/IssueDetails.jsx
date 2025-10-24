@@ -23,7 +23,8 @@ const IssueDetails = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const issue = useSelector(state => state.issues.issues.find(i => i.id === id))
+  const issues = useSelector(state => state.issues.issues)
+  const issue = Array.isArray(issues) ? issues.find(i => i.id === id) : null
 
   if (!issue) {
     return (

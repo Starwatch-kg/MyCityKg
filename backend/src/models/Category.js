@@ -88,12 +88,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     icon: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        isUrl: {
-          msg: 'Некорректный URL иконки'
-        }
-      }
+      allowNull: true
     },
     color: {
       type: DataTypes.STRING,

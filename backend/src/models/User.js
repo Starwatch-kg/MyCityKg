@@ -172,26 +172,53 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     location: {
-      type: DataTypes.GEOMETRY('POINT'),
-      allowNull: true
+      type: DataTypes.TEXT,
+      allowNull: true,
+      get() {
+        const value = this.getDataValue('location');
+        return value ? JSON.parse(value) : null;
+      },
+      set(value) {
+        this.setDataValue('location', value ? JSON.stringify(value) : null);
+      }
     },
     address: {
       type: DataTypes.TEXT,
       allowNull: true
     },
     volunteerStats: {
-      type: DataTypes.JSONB,
-      defaultValue: {
-        level: 1,
-        points: 0,
-        volunteerHours: 0,
-        tasksCompleted: 0,
-        rating: 0
+      type: DataTypes.TEXT,
+      defaultValue: '{"level":1,"points":0,"volunteerHours":0,"tasksCompleted":0,"rating":0}',
+      get() {
+        const value = this.getDataValue('volunteerStats');
+        return value ? JSON.parse(value) : {
+          level: 1,
+          points: 0,
+          volunteerHours: 0,
+          tasksCompleted: 0,
+          rating: 0
+        };
+      },
+      set(value) {
+        this.setDataValue('volunteerStats', JSON.stringify(value || {
+          level: 1,
+          points: 0,
+          volunteerHours: 0,
+          tasksCompleted: 0,
+          rating: 0
+        }));
       }
     },
     fcmTokens: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: []
+      type: DataTypes.TEXT,
+      defaultValue: '[]',
+      get() {
+        const value = this.getDataValue('fcmTokens');
+        return value ? JSON.parse(value) : [];
+      },
+      set(value) {
+        this.setDataValue('fcmTokens', JSON.stringify(value || []));
+      }
     },
     lastLoginAt: {
       type: DataTypes.DATE,
@@ -222,10 +249,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       {
         fields: ['isActive']
-      },
-      {
-        fields: ['location'],
-        using: 'gist'
       }
     ],
     hooks: {

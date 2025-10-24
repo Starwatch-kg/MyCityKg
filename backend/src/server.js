@@ -25,6 +25,7 @@ const volunteerRoutes = require('./routes/volunteers');
 const taskRoutes = require('./routes/tasks');
 const uploadRoutes = require('./routes/upload');
 const adminRoutes = require('./routes/admin');
+const testRoutes = require('./routes/test');
 
 const app = express();
 const server = createServer(app);
@@ -83,10 +84,14 @@ const limiter = rateLimit({
 // Middleware
 app.use(helmet());
 app.use(compression());
+// Temporary fix for CORS
+const corsOrigins = ['http://localhost:3000', 'http://localhost:3002', 'http://localhost:5173'];
 app.use(cors({
-  origin: config.cors.origin,
+  origin: corsOrigins,
   credentials: true,
 }));
+
+logger.info('CORS origins set to:', corsOrigins);
 app.use(limiter);
 app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
 app.use(express.json({ limit: '10mb' }));
@@ -116,6 +121,7 @@ apiRouter.use('/volunteers', volunteerRoutes);
 apiRouter.use('/tasks', taskRoutes);
 apiRouter.use('/upload', uploadRoutes);
 apiRouter.use('/admin', adminRoutes);
+apiRouter.use('/test', testRoutes);
 
 app.use(`/api/${config.apiVersion}`, apiRouter);
 

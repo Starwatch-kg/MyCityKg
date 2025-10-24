@@ -80,7 +80,8 @@ const issuesSlice = createSlice({
       })
       .addCase(fetchIssues.fulfilled, (state, action) => {
         state.loading = false
-        state.issues = action.payload
+        // API возвращает объект с полем reports, извлекаем массив
+        state.issues = action.payload.reports || action.payload || []
       })
       .addCase(fetchIssues.rejected, (state, action) => {
         state.loading = false

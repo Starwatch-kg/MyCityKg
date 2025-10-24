@@ -19,10 +19,8 @@ const MyReports = () => {
   const [showFilters, setShowFilters] = useState(false)
 
   // Фильтруем жалобы пользователя
-  const myReports = issues.filter(issue => 
-    issue.userId === user?.id || 
-    (issue.isAnonymous && issue.createdBy === user?.id)
-  )
+  // Временно показываем все жалобы, так как нет аутентификации
+  const myReports = Array.isArray(issues) ? issues : []
 
   // Применяем фильтры
   const filteredReports = myReports.filter(report => {

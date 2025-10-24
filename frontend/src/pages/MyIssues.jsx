@@ -21,6 +21,7 @@ const statusColors = {
 const MyIssues = () => {
   const navigate = useNavigate()
   const issues = useSelector(state => state.issues.issues)
+  const issuesArray = Array.isArray(issues) ? issues : []
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -40,25 +41,25 @@ const MyIssues = () => {
       <div className="bg-accent/95 backdrop-blur-sm p-3 sm:p-4 lg:p-6 sticky top-0 z-50 shadow-lg safe-area-top">
         <div className="px-4 lg:px-8">
           <h1 className="text-xl sm:text-2xl font-bold text-white">Мои жалобы</h1>
-          <p className="text-gray-400 text-xs sm:text-sm mt-1">Всего обращений: {issues.length}</p>
+          <p className="text-gray-400 text-xs sm:text-sm mt-1">Всего обращений: {issuesArray.length}</p>
         </div>
       </div>
 
       {/* Issues List */}
       <div className="p-3 sm:p-4 lg:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-        {issues.length === 0 ? (
+        {issuesArray.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-400 mb-4">У вас пока нет обращений</p>
             <button
-              onClick={() => navigate('/add')}
-              className="bg-primary text-accent px-6 py-3 rounded-xl font-medium hover:bg-red-600 transition-colors"
+              onClick={() => navigate('/add-issue')}
+              className="bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
             >
-              Добавить первую жалобу
+              Создать первое обращение
             </button>
           </div>
         ) : (
-          issues.map((issue, index) => (
+          issuesArray.map((issue, index) => (
             <motion.div
               key={issue.id}
               initial={{ opacity: 0, y: 20 }}

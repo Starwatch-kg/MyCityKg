@@ -126,8 +126,15 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     location: {
-      type: DataTypes.GEOMETRY('POINT'),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: false,
+      get() {
+        const value = this.getDataValue('location');
+        return value ? JSON.parse(value) : null;
+      },
+      set(value) {
+        this.setDataValue('location', JSON.stringify(value));
+      }
     },
     address: {
       type: DataTypes.STRING,
@@ -203,12 +210,26 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     requiredSkills: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: []
+      type: DataTypes.TEXT,
+      defaultValue: '[]',
+      get() {
+        const value = this.getDataValue('requiredSkills');
+        return value ? JSON.parse(value) : [];
+      },
+      set(value) {
+        this.setDataValue('requiredSkills', JSON.stringify(value || []));
+      }
     },
     images: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: []
+      type: DataTypes.TEXT,
+      defaultValue: '[]',
+      get() {
+        const value = this.getDataValue('images');
+        return value ? JSON.parse(value) : [];
+      },
+      set(value) {
+        this.setDataValue('images', JSON.stringify(value || []));
+      }
     },
     deadline: {
       type: DataTypes.DATE,
@@ -225,8 +246,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     metadata: {
-      type: DataTypes.JSONB,
-      defaultValue: {}
+      type: DataTypes.TEXT,
+      defaultValue: '{}',
+      get() {
+        const value = this.getDataValue('metadata');
+        return value ? JSON.parse(value) : {};
+      },
+      set(value) {
+        this.setDataValue('metadata', JSON.stringify(value || {}));
+      }
     }
   }, {
     tableName: 'volunteer_tasks',

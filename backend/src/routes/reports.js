@@ -116,18 +116,8 @@ router.get('/', optionalAuth, [
   if (status) query.status = status;
   if (priority) query.priority = priority;
 
-  // Location-based search
-  if (latitude && longitude) {
-    query.location = {
-      $near: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [parseFloat(longitude), parseFloat(latitude)],
-        },
-        $maxDistance: parseFloat(radius),
-      },
-    };
-  }
+  // Note: Location-based search is not implemented for SQLite
+  // In production, this would require PostGIS or similar spatial extension
 
   try {
     const reports = await Report.findAll({
@@ -261,7 +251,7 @@ router.get('/:id', optionalAuth, asyncHandler(async (req, res) => {
  *       400:
  *         description: Ошибка валидации
  */
-router.post('/', auth, upload.array('images', 5), [
+router.post('/', upload.array('images', 5), [
   body('title')
     .trim()
     .isLength({ min: 5, max: config.validation.maxTitleLength })
@@ -271,7 +261,7 @@ router.post('/', auth, upload.array('images', 5), [
     .isLength({ min: config.validation.minDescriptionLength, max: config.validation.maxDescriptionLength })
     .withMessage(`Описание должно содержать от ${config.validation.minDescriptionLength} до ${config.validation.maxDescriptionLength} символов`),
   body('category')
-    .isIn(config.constants.reportCategories)
+    .isInt({ min: 1 })
     .withMessage('Некорректная категория'),
   body('priority')
     .optional()
@@ -331,38 +321,28 @@ router.post('/', auth, upload.array('images', 5), [
     }
 
     // Create report
-    const report = new Report({
+    const report = await Report.create({
       title,
       description,
-      category,
+      categoryId: category,
       priority,
-      location: locationData,
+      location: JSON.stringify(locationData),
       address,
-      images,
-      user: req.user._id,
+      images: JSON.stringify(images),
+      userId: null, // Anonymous for now
       isAnonymous,
-      tags: tagsArray,
-      metadata: {
+      metadata: JSON.stringify({
         deviceInfo: req.get('User-Agent'),
         appVersion: req.get('App-Version'),
-        submissionMethod: 'mobile',
+        submissionMethod: 'web',
         ipAddress: req.ip,
         userAgent: req.get('User-Agent'),
-      },
+      }),
     });
-
-    await report.save();
-
-    // Update user stats
-    req.user.updateStats('reportsSubmitted');
-    await req.user.save();
-
-    // Populate user data for response
-    await report.populate('user', 'firstName lastName avatar');
 
     // Send notification to nearby users (TODO: implement)
     
-    logger.info(`New report created: ${report._id} by user ${req.user._id}`);
+    logger.info(`New report created: ${report.id} (anonymous)`);
 
     res.status(201).json({
       success: true,

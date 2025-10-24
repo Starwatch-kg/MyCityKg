@@ -159,17 +159,27 @@ const AddIssue = () => {
     setIsSubmitting(true)
 
     try {
+      // Map issue type to category ID
+      const typeToCategoryMap = {
+        'мусор': 3,
+        'освещение': 2,
+        'дороги': 1,
+        'вода': 6,
+        'запах': 8,
+        'другое': 8
+      };
+
       // Prepare data for backend API
       const reportData = {
         title: formData.title,
         description: formData.description,
-        categoryId: 1, // Default category, should be mapped from formData.type
-        location: {
+        category: typeToCategoryMap[formData.type] || 8, // Use 'category' field as expected by backend
+        location: JSON.stringify({
           type: 'Point',
           coordinates: [formData.location.lng, formData.location.lat]
-        },
+        }),
         address: formData.address,
-        images: photoPreviews.length > 0 ? photoPreviews : [],
+        images: JSON.stringify(photoPreviews.length > 0 ? photoPreviews : []),
         isAnonymous: formData.anonymous
       }
 

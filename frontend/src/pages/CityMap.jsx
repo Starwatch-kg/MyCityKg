@@ -146,11 +146,12 @@ const CityMap = () => {
     { value: 'другое', label: 'Другое', icon: FileText, color: '#607D8B' },
   ]
 
-  const filteredIssues = issues.filter(issue => {
-    if (filters.type && issue.type !== filters.type) return false
+  const filteredIssues = Array.isArray(issues) ? issues.filter(issue => {
+    // Фильтрация по типу пока отключена, так как используется categoryId вместо type
+    // if (filters.type && issue.type !== filters.type) return false
     if (filters.status && issue.status !== filters.status) return false
     return true
-  })
+  }) : []
 
   const handleMarkerClick = (issue) => {
     navigate(`/issue/${issue.id}`)
@@ -231,15 +232,36 @@ const CityMap = () => {
         <MapClickHandler onMapClick={handleMapClick} />
         <LocationMarker />
 
-        {filteredIssues.map((issue) => (
-          <Marker
-            key={issue.id}
-            position={[issue.location.lat, issue.location.lng]}
-            icon={createCustomIcon(statusColors[issue.status], issue.type)}
-            eventHandlers={{
-              click: () => handleMarkerClick(issue),
-            }}
-          >
+        {filteredIssues.map((issue) => {
+          // Парсим location из JSON строки
+          let coordinates = null;
+          try {
+            const locationData = typeof issue.location === 'string' 
+              ? JSON.parse(issue.location) 
+              : issue.location;
+            
+            if (locationData && locationData.coordinates && Array.isArray(locationData.coordinates)) {
+              // GeoJSON формат: [longitude, latitude]
+              coordinates = [locationData.coordinates[1], locationData.coordinates[0]];
+            }
+          } catch (error) {
+            console.error('Error parsing location:', error, issue.location);
+          }
+
+          // Пропускаем маркер если координаты невалидны
+          if (!coordinates || coordinates.some(coord => coord === undefined || coord === null)) {
+            return null;
+          }
+
+          return (
+            <Marker
+              key={issue.id}
+              position={coordinates}
+              icon={createCustomIcon(statusColors[issue.status], 'default')}
+              eventHandlers={{
+                click: () => handleMarkerClick(issue),
+              }}
+            >
             <Popup>
               <div className="p-2">
                 <h3 className="font-semibold text-white mb-1">{issue.title}</h3>
@@ -256,7 +278,8 @@ const CityMap = () => {
               </div>
             </Popup>
           </Marker>
-        ))}
+          );
+        })}
       </MapContainer>
 
       {/* Locate Me Button */}

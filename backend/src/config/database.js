@@ -2,12 +2,8 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    username: process.env.DB_USERNAME || 'postgres',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'mycitykg_dev',
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: process.env.DB_PORT || 5432,
-    dialect: 'postgres',
+    storage: require('path').join(__dirname, '..', 'database.sqlite'),
+    dialect: 'sqlite',
     logging: console.log,
     pool: {
       max: 5,
@@ -17,12 +13,8 @@ module.exports = {
     }
   },
   test: {
-    username: process.env.DB_USERNAME || 'postgres',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_TEST_NAME || 'mycitykg_test',
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: process.env.DB_PORT || 5432,
-    dialect: 'postgres',
+    storage: ':memory:',
+    dialect: 'sqlite',
     logging: false,
     pool: {
       max: 5,
